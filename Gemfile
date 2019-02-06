@@ -25,6 +25,13 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+# for the charts
+gem 'chartkick'
+gem 'highcharts-rails'
+
+# parsing api requests
+gem 'httparty', '~> 0.13.7'
+
 group :development, :test do
   # for debugging
   gem 'pry'
