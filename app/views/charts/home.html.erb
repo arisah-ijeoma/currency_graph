@@ -1,3 +1,17 @@
-<% @response["rates"].keys.sort.each do |k| %>
-  <%= @response["rates"][k] %>
-<% end %>
+<% mmm = @response["rates"].each_pair { |key, value|
+  @response["rates"][key] = value.to_a[0]
+} %>
+
+<% data = [] %>
+<% mmm.each do |k, v|
+  data << [k, v[1]]
+end %>
+
+<%= line_chart data %>
+
+<!-- continue from here - put this in the right place and refactor the algorithm -->
+
+<%= link_to 'BRL', root_path(compare: 'BRL') %>
+<%= link_to 'USD', root_path(compare: 'USD') %>
+<%= link_to 'EUR', root_path(compare: 'EUR') %>
+<%= link_to 'AUD', root_path(compare: 'AUD') %>
