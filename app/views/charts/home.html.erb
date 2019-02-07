@@ -1,17 +1,32 @@
-<% mmm = @response["rates"].each_pair { |key, value|
-  @response["rates"][key] = value.to_a[0]
-} %>
+<% if @response %>
+  <h2>Currency Chart</h2>
 
-<% data = [] %>
-<% mmm.each do |k, v|
-  data << [k, v[1]]
-end %>
+  <% mmm = @response["rates"].each_pair { |key, value|
+    @response["rates"][key] = value.to_a[0]
+  } %>
 
-<%= line_chart data %>
+  <% data = [] %>
+  <% mmm.each do |k, v|
+    data << [k, v[1]]
+  end %>
 
-<!-- continue from here - put this in the right place and refactor the algorithm -->
+  <%= line_chart data %>
 
-<%= link_to 'BRL', root_path(compare: 'BRL'), class: 'btn btn-primary' %>
-<%= link_to 'USD', root_path(compare: 'USD'), class: 'btn btn-primary' %>
-<%= link_to 'EUR', root_path(compare: 'EUR'), class: 'btn btn-primary' %>
-<%= link_to 'AUD', root_path(compare: 'AUD'), class: 'btn btn-primary' %>
+  <!-- continue from here - put this in the right place and refactor the algorithm -->
+
+  Base: <%= select_tag :currency, options_for_select(Currency::CURRENCIES, selected: params[:base]), class: 'form-control',
+  onchange: "window.location.replace('?base='+this.value);" %>
+
+  <br/>
+
+  <div style="padding-top: 20px">
+    Compare with:
+    <%= link_to 'BRL', root_path(base: params[:base], compare: 'BRL'), class: 'btn btn-primary' %>
+    <%= link_to 'USD', root_path(base: params[:base], compare: 'USD'), class: 'btn btn-primary' %>
+    <%= link_to 'EUR', root_path(base: params[:base], compare: 'EUR'), class: 'btn btn-primary' %>
+    <%= link_to 'AUD', root_path(base: params[:base], compare: 'AUD'), class: 'btn btn-primary' %>
+  </div>
+<% else %>
+  <h4>You can't compare a currency against itself</h4>
+  <%= link_to 'Go Back', root_path %>
+<% end %>
