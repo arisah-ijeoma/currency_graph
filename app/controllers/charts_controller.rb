@@ -2,15 +2,20 @@
 
 class ChartsController < ApplicationController
   def home
-    base = params[:cur] || 'BRL'
+    base = params[:base] || 'BRL'
     compare = params[:compare] || 'USD'
     today = Date.today
-    @response ||= HTTParty.get('https://api.exchangeratesapi.io/history?'\
-    "start_at=#{today - 1.year}&end_at=#{today}&base=#{base}&symbols=#{compare}")
 
-    # one base three other currencies
-    # base can be changed
-    # you can't compare base with itself OR you'll get 1
-    # symbols will have to be dynamic
+    # the API can not compare EUR
+    return nil if base == compare
+
+    begin
+      @response ||= HTTParty.get('https://api.exchangeratesapi.io/history?'\
+      "start_at=#{today - 1.year}&end_at=#{today}&base=#{base}&symbols=#{compare}")
+    rescue Errno::ECONNRESET => e
+      count += 1
+      retry unless count > 5
+      puts "tried 10 times and couldn't get #{url}: #{e}"
+    end
   end
 end
