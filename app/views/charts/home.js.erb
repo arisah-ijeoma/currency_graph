@@ -1,0 +1,5 @@
+<% if @compare == @base %>
+  alert("You can't compare a currency against itself");
+<% else %>
+  $("#currency_values").replaceWith("<%= j render partial: 'charts/data', locals: { compare: @compare } %>");
+<% end %>

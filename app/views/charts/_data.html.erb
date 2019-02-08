@@ -1,0 +1,10 @@
+<div id="currency_values">
+  <h5 id="user_note">You are comparing <b><%= @base %></b> against <b><%= compare %></b></h5>
+
+  <% data = [] %>
+  <% @response["rates"].each do |k, v| %>
+    <% data << [k, v[compare]] %>
+  <% end %>
+
+  <%= line_chart data %>
+</div>
