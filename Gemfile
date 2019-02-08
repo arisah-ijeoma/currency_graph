@@ -31,13 +31,16 @@ gem 'highcharts-rails'
 gem 'httparty', '~> 0.13.7'
 
 group :development, :test do
-  # for debugging
+  # DEBUGGING
   gem 'pry'
   gem 'pry-nav'
   gem 'pry-rails'
 
-  # for testing
+  # TESTING
+  # testing framework
   gem 'rspec-rails', '~> 3.8'
+  # mocking external apis
+  gem 'webmock', '~> 2.1'
 end
 
 group :development do

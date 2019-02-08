@@ -1,5 +1,9 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+
+require 'webmock/rspec'
+WebMock.disable_net_connect!(allow_localhost: true)
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
@@ -58,4 +62,55 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+  #
+  # stubbing API external calls
+  config.before(:each) do
+    stub_request(:get, /api.exchangeratesapi.io/).with(
+      headers: {
+        'Accept'=>'*/*', 'User-Agent'=>'Ruby'
+      }
+    ).to_return(
+      status: 200,
+      body: {
+        "base": "USD",
+        "date": "2019-02-08",
+        "rates": {
+          "ISK": 120.218579235,
+          "CAD": 1.3306892297,
+          "MXN": 19.0400141019,
+          "CHF": 1.0009695047,
+          "AUD": 1.4107174335,
+          "CNY": 6.7448439979,
+          "GBP": 0.7711087608,
+          "USD": 1,
+          "SEK": 9.2519830777,
+          "NOK": 8.6103472589,
+          "TRY": 5.2430812621,
+          "IDR": 13965.0008813679,
+          "ZAR": 13.6098184382,
+          "HRK": 6.528732593,
+          "EUR": 0.881367883,
+          "HKD": 7.8459368941,
+          "ILS": 3.6341441918,
+          "NZD": 1.4814912745,
+          "MYR": 4.069539926,
+          "JPY": 109.7919971796,
+          "CZK": 22.7445795875,
+          "SGD": 1.3551912568,
+          "RUB": 65.933809272,
+          "RON": 4.1851753922,
+          "HUF": 280.5658381809,
+          "BGN": 1.7237793055,
+          "INR": 71.272254539,
+          "KRW": 1122.8274281685,
+          "DKK": 6.5780010576,
+          "THB": 31.4851048828,
+          "PHP": 52.1320289089,
+          "PLN": 3.7955226512,
+          "BRL": 3.7101181033
+        }
+      }.to_json,
+      headers: {}
+    )
+  end
 end
