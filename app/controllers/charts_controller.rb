@@ -3,10 +3,13 @@
 class ChartsController < ApplicationController
   def home
     @base = params[:base] || 'BRL'
-    @compare = params[:compare] || 'USD'
-    today = Date.today
+    other_currencies = Currency::CURRENCIES - [@base]
 
-    symbols = (Currency::CURRENCIES - [@base]).join(',')
+    # set default currency to compare with base currency
+    @compare = params[:compare] || other_currencies.sample
+
+    today = Date.today
+    symbols = other_currencies.join(',')
 
     begin
       @response ||= HTTParty.get('https://api.exchangeratesapi.io/history?'\
